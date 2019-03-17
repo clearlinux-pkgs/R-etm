@@ -4,22 +4,20 @@
 #
 Name     : R-etm
 Version  : 1.0.4
-Release  : 12
+Release  : 13
 URL      : https://cran.r-project.org/src/contrib/etm_1.0.4.tar.gz
 Source0  : https://cran.r-project.org/src/contrib/etm_1.0.4.tar.gz
 Summary  : Empirical Transition Matrix
 Group    : Development/Tools
 License  : MIT
-Requires: R-etm-lib
-Requires: R-Rcpp
+Requires: R-etm-lib = %{version}-%{release}
 Requires: R-RcppArmadillo
 Requires: R-data.table
 Requires: R-kmi
-BuildRequires : R-Rcpp
 BuildRequires : R-RcppArmadillo
 BuildRequires : R-data.table
 BuildRequires : R-kmi
-BuildRequires : clr-R-helpers
+BuildRequires : buildreq-R
 
 %description
 # etm
@@ -41,11 +39,11 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1531449542
+export SOURCE_DATE_EPOCH=1552807517
 
 %install
+export SOURCE_DATE_EPOCH=1552807517
 rm -rf %{buildroot}
-export SOURCE_DATE_EPOCH=1531449542
 export LANG=C
 export CFLAGS="$CFLAGS -O3 -flto -fno-semantic-interposition "
 export FCFLAGS="$CFLAGS -O3 -flto -fno-semantic-interposition "
@@ -63,9 +61,9 @@ echo "FFLAGS = $FFLAGS -march=haswell -ftree-vectorize " >> ~/.R/Makevars
 echo "CXXFLAGS = $CXXFLAGS -march=haswell -ftree-vectorize " >> ~/.R/Makevars
 R CMD INSTALL --install-tests --built-timestamp=${SOURCE_DATE_EPOCH} --build  -l %{buildroot}/usr/lib64/R/library etm
 for i in `find %{buildroot}/usr/lib64/R/ -name "*.so"`; do mv $i $i.avx2 ; mv $i.avx2 ~/.stash/; done
-echo "CFLAGS = $CFLAGS -march=skylake-avx512 -ftree-vectorize -mprefer-vector-width=512 " > ~/.R/Makevars
-echo "FFLAGS = $FFLAGS -march=skylake-avx512 -ftree-vectorize -mprefer-vector-width=512 " >> ~/.R/Makevars
-echo "CXXFLAGS = $CXXFLAGS -march=skylake-avx512 -ftree-vectorize -mprefer-vector-width=512  " >> ~/.R/Makevars
+echo "CFLAGS = $CFLAGS -march=skylake-avx512 -ftree-vectorize " > ~/.R/Makevars
+echo "FFLAGS = $FFLAGS -march=skylake-avx512 -ftree-vectorize " >> ~/.R/Makevars
+echo "CXXFLAGS = $CXXFLAGS -march=skylake-avx512 -ftree-vectorize " >> ~/.R/Makevars
 R CMD INSTALL --preclean --install-tests --no-test-load --built-timestamp=${SOURCE_DATE_EPOCH} --build  -l %{buildroot}/usr/lib64/R/library etm
 for i in `find %{buildroot}/usr/lib64/R/ -name "*.so"`; do mv $i $i.avx512 ; mv $i.avx512 ~/.stash/; done
 echo "CFLAGS = $CFLAGS -ftree-vectorize " > ~/.R/Makevars
@@ -80,8 +78,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export _R_CHECK_FORCE_SUGGESTS_=false
-R CMD check --no-manual --no-examples --no-codoc -l %{buildroot}/usr/lib64/R/library etm|| : 
-cp ~/.stash/* %{buildroot}/usr/lib64/R/library/*/libs/ || :
+R CMD check --no-manual --no-examples --no-codoc  etm || :
 
 
 %files
@@ -117,7 +114,10 @@ cp ~/.stash/* %{buildroot}/usr/lib64/R/library/*/libs/ || :
 /usr/lib64/R/library/etm/help/paths.rds
 /usr/lib64/R/library/etm/html/00Index.html
 /usr/lib64/R/library/etm/html/R.css
-/usr/lib64/R/library/etm/libs/symbols.rds
+/usr/lib64/R/library/etm/tests/test.etmCIF.R
+/usr/lib64/R/library/etm/tests/test.etmCIF.Rout.save
+/usr/lib64/R/library/etm/tests/tests.etm.R
+/usr/lib64/R/library/etm/tests/tests.etm.Rout.save
 
 %files lib
 %defattr(-,root,root,-)
