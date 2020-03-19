@@ -4,7 +4,7 @@
 #
 Name     : R-etm
 Version  : 1.0.5.1
-Release  : 24
+Release  : 25
 URL      : https://cran.r-project.org/src/contrib/etm_1.0.5.1.tar.gz
 Source0  : https://cran.r-project.org/src/contrib/etm_1.0.5.1.tar.gz
 Summary  : Empirical Transition Matrix
